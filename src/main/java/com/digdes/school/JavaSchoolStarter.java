@@ -1,9 +1,7 @@
 package com.digdes.school;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.function.Predicate;
 
 public class JavaSchoolStarter {
     public List<Map<String, Object>> getJssList() {
@@ -14,40 +12,127 @@ public class JavaSchoolStarter {
     private List<Map<String, Object>> jssList = new ArrayList<>();
 
     public JavaSchoolStarter() {
-        List<String> columns = new ArrayList<>();
-        columns.add("id");
-        columns.add("lastName");
-        columns.add("age");
-        columns.add("cost");
-        columns.add("active");
 
     }
 
     //На вход запрос, на выход результат выполнения запроса
     public List<Map<String, Object>> execute(String request) throws Exception {
         //Здесь начало исполнения вашего кода
-        JavaSchoolStarter javaSchoolStarter = new JavaSchoolStarter();
-        ArrayList<ArrayList<String>> data = Divider.divide(request);
-        ArrayList<String> valueStrings = data.get(1);
-        ArrayList<String> whereStrings = data.get(2);
-        WhereInterface where = new Where().getWhere(whereStrings);
+            ArrayList<ArrayList<String>> data = Divider.divide(request);
+            ArrayList<String> valueStrings = data.get(1);
+            Map<String, Object> valueInsertMap = getInsertMap(valueStrings);
+            Map<String, Object> valueUpdateMap = getUpdateMap(valueStrings);
+            ArrayList<String> whereStrings = data.get(2);
+            Predicate<Map<String, Object>> where = new Where().getWhere(whereStrings);
 
-        switch (data.get(0).get(0)) {
-            case ("INSERT"):
-                return insert(valueStrings);
-            case ("UPDATE"):
-                return update(valueStrings, where);
-            case ("DELETE"):
-                return delete(where);
-            case ("SELECT"):
-                return select(where);
-            default:
-                throw new IllegalStateException("Unexpected value: " + data.get(0));
-        }
-//        return new ArrayList<>();
+            for (int i = 0; i < valueStrings.size(); i += 2) {
+                haveColumn(valueStrings.get(i));
+            }
+            return switch (data.get(0).get(0).toLowerCase()) {
+                case ("insert") -> insert(valueInsertMap);
+                case ("update") -> update(valueUpdateMap, where);
+                case ("delete") -> delete(where);
+                case ("select") -> select(where);
+                default -> throw new IllegalStateException("Unexpected value: " + data.get(0));
+            };
     }
 
-    private List<Map<String, Object>> update(ArrayList<String> valueStrings, WhereInterface where) {
+    private boolean haveColumn(String v) throws Exception {
+        List<String> columns = new ArrayList<>();
+        columns.add("id");
+        columns.add("lastname");
+        columns.add("age");
+        columns.add("cost");
+        columns.add("active");
+        if (!columns.contains(v.toLowerCase())) {
+            throw new IllegalArgumentException("Wrong column name");
+        } else {
+            return true;
+        }
+    }
+
+    private Map<String, Object> getUpdateMap(ArrayList<String> valueStrings) {
+        List<String> columns = new ArrayList<>();
+        columns.add("id");
+        columns.add("lastName");
+        columns.add("age");
+        columns.add("cost");
+        columns.add("active");
+        Map<String, Object> result = new HashMap<>();
+//        for (String s : columns) {
+//            result.put(s, null);
+//        }
+        int iterator = 0;
+        while (iterator < valueStrings.size()) {
+            String column_name = valueStrings.get(iterator);
+            if (columns.contains(column_name)) {
+                String column_data = valueStrings.get(iterator + 1);
+                if (!Objects.equals(column_data, "null")) {
+                    //result.replace(columns.get(columns.indexOf(column_name)), column_data);
+                    switch (column_name) {
+                        case ("id"), ("age"):
+                            result.put(column_name, Long.parseLong(column_data));
+                            break;
+                        case ("lastName"):
+                            result.put(column_name, column_data);
+                            break;
+                        case ("cost"):
+                            result.put(column_name, Double.parseDouble(column_data));
+                            break;
+                        case ("active"):
+                                result.put(column_name, column_data.equals("true"));
+                            break;
+                    }
+                }
+                else{
+                    result.put(column_name, null);
+                }
+            }
+            iterator += 2;
+        }
+        return result;
+    }
+
+    private Map<String, Object> getInsertMap(ArrayList<String> valueStrings) {
+        List<String> columns = new ArrayList<>();
+        columns.add("id");
+        columns.add("lastName");
+        columns.add("age");
+        columns.add("cost");
+        columns.add("active");
+        Map<String, Object> result = new HashMap<>();
+        for (String s : columns) {
+            result.put(s, null);
+        }
+        int iterator = 0;
+        while (iterator < valueStrings.size()) {
+            String column_name = valueStrings.get(iterator);
+            if (columns.contains(column_name)) {
+                String column_data = valueStrings.get(iterator + 1);
+                if (!column_data.isEmpty()) {
+                    //result.replace(columns.get(columns.indexOf(column_name)), column_data);
+                    switch (column_name) {
+                        case ("id"), ("age"):
+                            result.replace(column_name, Long.parseLong(column_data));
+                            break;
+                        case ("lastName"):
+                            result.replace(column_name, column_data);
+                            break;
+                        case ("cost"):
+                            result.replace(column_name, Double.parseDouble(column_data));
+                            break;
+                        case ("active"):
+                            result.replace(column_name, column_data.equals("true"));
+                            break;
+                    }
+                }
+            }
+            iterator += 2;
+        }
+        return result;
+    }
+
+    private List<Map<String, Object>> update(Map<String, Object> valueMap, Predicate<Map<String, Object>> where) {
         List<Map<String, Object>> to_update = select(where);
         List<Map<String, Object>> result = new ArrayList<>();
         List<String> columns = new ArrayList<>();
@@ -57,31 +142,37 @@ public class JavaSchoolStarter {
         columns.add("cost");
         columns.add("active");
 
-        for(Map<String, Object> jssRow:jssList){
-            for(Map<String, Object> to_update_row:to_update){
-                if(jssRow.equals(to_update_row)){
+        for (Map<String, Object> jssRow : jssList) {
+            for (Map<String, Object> to_update_row : to_update) {
+                if (jssRow.equals(to_update_row)) {
                     int iterator = 0;
-                    while (iterator < valueStrings.size()) {
-                        String column_name = valueStrings.get(iterator);
-                        if (columns.contains(column_name)) {
-                            String column_data = valueStrings.get(iterator + 1);
-                            jssRow.replace(columns.get(columns.indexOf(column_name)), column_data);
-                            switch (column_name) {
-                                case ("id"), ("age"):
-                                    jssRow.replace(columns.get(columns.indexOf(column_name)), Long.parseLong(column_data));
-                                    break;
-                                case ("lastName"):
-                                    jssRow.replace(columns.get(columns.indexOf(column_name)), column_data);
-                                    break;
-                                case ("cost"):
-                                    jssRow.replace(columns.get(columns.indexOf(column_name)), Double.parseDouble(column_data));
-                                    break;
-                                case ("active"):
-                                    jssRow.replace(columns.get(columns.indexOf(column_name)), column_data.equals("true"));
-                                    break;
+                    while (iterator < valueMap.size()) {
+                        String column_name = (String) valueMap.keySet().toArray()[iterator];
+                        if (columns.contains(column_name)  /*&&valueMap.get(column_name) != null*/) {
+                            if (valueMap.get(column_name) != null) {
+                                String column_data = valueMap.get(column_name).toString();
+//                            jssRow.replace(columns.get(columns.indexOf(column_name)), column_data);
+
+                                switch (column_name) {
+                                    case ("id"), ("age") ->
+                                            jssRow.replace(columns.get(columns.indexOf(column_name)), Long.parseLong(column_data));
+                                    case ("lastName") ->
+                                            jssRow.replace(columns.get(columns.indexOf(column_name)), column_data);
+                                    case ("cost") ->
+                                            jssRow.replace(columns.get(columns.indexOf(column_name)), Double.parseDouble(column_data));
+                                    case ("active") -> {
+                                        if (column_data.isEmpty()) {
+                                            jssRow.replace(columns.get(columns.indexOf(column_name)), null);
+                                        } else {
+                                            jssRow.replace(columns.get(columns.indexOf(column_name)), column_data.equals("true"));
+                                        }
+                                    }
+                                }
+                            } else {
+                                jssRow.replace(columns.get(columns.indexOf(column_name)), null);
                             }
                         }
-                        iterator += 2;
+                        iterator += 1;
                     }
                     result.add(jssRow);
                 }
@@ -90,53 +181,18 @@ public class JavaSchoolStarter {
         return result;
     }
 
-    private List<Map<String, Object>> insert(ArrayList<String> valueStrings) {
+    private List<Map<String, Object>> insert(Map<String, Object> valueMap) {
         List<Map<String, Object>> result = new ArrayList<>();
-        List<String> columns = new ArrayList<>();
-        columns.add("id");
-        columns.add("lastName");
-        columns.add("age");
-        columns.add("cost");
-        columns.add("active");
-        Map<String, Object> row = new HashMap<>();
-        for (String s : columns) {
-            row.put(s, null);
-        }
-        int iterator = 0;
-        while (iterator < valueStrings.size()) {
-            String column_name = valueStrings.get(iterator);
-            if (columns.contains(column_name)) {
-                String column_data = valueStrings.get(iterator + 1);
-                row.replace(columns.get(columns.indexOf(column_name)), column_data);
-                switch (column_name) {
-                    case ("id"), ("age"):
-                        row.replace(columns.get(columns.indexOf(column_name)), Long.parseLong(column_data));
-                        break;
-                    case ("lastName"):
-                        row.replace(columns.get(columns.indexOf(column_name)), column_data);
-                        break;
-                    case ("cost"):
-                        row.replace(columns.get(columns.indexOf(column_name)), Double.parseDouble(column_data));
-                        break;
-                    case ("active"):
-                        row.replace(columns.get(columns.indexOf(column_name)), column_data.equals("true"));
-                        break;
-                }
-            }
-            iterator += 2;
-
-
-        }
-        result.add(row);
-        jssList.add(row);
+        result.add(valueMap);
+        jssList.add(valueMap);
         return result;
     }
 
-    private List<Map<String, Object>> delete(WhereInterface where) {
+    private List<Map<String, Object>> delete(Predicate<Map<String, Object>> where) {
         List<Map<String, Object>> to_delete = new ArrayList<>();
         List<Map<String, Object>> result = new ArrayList<>();
         for (Map<String, Object> jssLine : jssList) {
-            if (where.compare(jssLine)) {
+            if (where.test(jssLine)) {
                 to_delete.add(jssLine);
             } else {
                 result.add(jssLine);
@@ -147,10 +203,10 @@ public class JavaSchoolStarter {
         return to_delete;
     }
 
-    private List<Map<String, Object>> select(WhereInterface where) {
+    private List<Map<String, Object>> select(Predicate<Map<String, Object>> where) {
         List<Map<String, Object>> result = new ArrayList<>();
         for (Map<String, Object> jssLine : jssList) {
-            if (where.compare(jssLine)) {
+            if (where.test(jssLine)) {
                 result.add(jssLine);
             }
         }

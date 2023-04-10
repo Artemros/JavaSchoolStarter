@@ -9,7 +9,6 @@ public class Divider {
         List<String> list = new ArrayList<>();
         list.add(request);
         List<String> tokens = new ArrayList<>();
-//        for (String s : Arrays.asList("‘", "’", ",", "!=", "<=", ">=", "\\s+"))
         for (String s : Arrays.asList("‘", "’", ",", " ")) {
             List<String> temp = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
