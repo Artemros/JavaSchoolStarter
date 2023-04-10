@@ -273,14 +273,6 @@ class SelectTest {
     public void selectLikeTest2() throws Exception {
         JavaSchoolStarter jss = new JavaSchoolStarter();
         List<Map<String, Object>> data = new ArrayList<>();
-//        Map<String,Object> row1 = new HashMap<>();
-//        row1.put("id",1L);
-//        row1.put("lastName","Петров");
-//        row1.put("age",30L);
-//        row1.put("cost",5.4);
-//        row1.put("active", true);
-//
-//        data.add(row1);
         jss.execute("INSERT VALUES ‘lastName’ = ‘Петров’ , ‘id’=1, ‘age’=30, ‘active’=true, ‘cost’=5.4");
         jss.execute("INSERT VALUES ‘lastName’ = ‘Иванов’ , ‘id’=2, ‘age’=25, ‘active’=false, ‘cost’=4.3");
         List<Map<String, Object>> selected = jss.execute("SELECT WHERE ‘age’>=30 and ‘lastName’ like ‘%П’");
@@ -309,14 +301,6 @@ class SelectTest {
     public void selectLikeTest4() throws Exception {
         JavaSchoolStarter jss = new JavaSchoolStarter();
         List<Map<String, Object>> data = new ArrayList<>();
-//        Map<String,Object> row1 = new HashMap<>();
-//        row1.put("id",1L);
-//        row1.put("lastName","Петров");
-//        row1.put("age",30L);
-//        row1.put("cost",5.4);
-//        row1.put("active", true);
-//
-//        data.add(row1);
         jss.execute("INSERT VALUES ‘lastName’ = ‘Петров’ , ‘id’=1, ‘age’=30, ‘active’=true, ‘cost’=5.4");
         jss.execute("INSERT VALUES ‘lastName’ = ‘Иванов’ , ‘id’=2, ‘age’=25, ‘active’=false, ‘cost’=4.3");
         List<Map<String, Object>> selected = jss.execute("SELECT WHERE ‘age’>=30 and ‘lastName’ like ‘п%’");
@@ -373,14 +357,6 @@ class SelectTest {
     public void selectILikeTest2() throws Exception {
         JavaSchoolStarter jss = new JavaSchoolStarter();
         List<Map<String, Object>> data = new ArrayList<>();
-//        Map<String,Object> row1 = new HashMap<>();
-//        row1.put("id",1L);
-//        row1.put("lastName","Петров");
-//        row1.put("age",30L);
-//        row1.put("cost",5.4);
-//        row1.put("active", true);
-//
-//        data.add(row1);
         jss.execute("INSERT VALUES ‘lastName’ = ‘Петров’ , ‘id’=1, ‘age’=30, ‘active’=true, ‘cost’=5.4");
         jss.execute("INSERT VALUES ‘lastName’ = ‘Иванов’ , ‘id’=2, ‘age’=25, ‘active’=false, ‘cost’=4.3");
         List<Map<String, Object>> selected = jss.execute("SELECT WHERE ‘age’>=30 and ‘lastName’ ilike ‘%п’");
@@ -454,15 +430,6 @@ class SelectTest {
     @Test
     public void selectWrongColumnTest1() throws Exception {
         JavaSchoolStarter jss = new JavaSchoolStarter();
-        List<Map<String, Object>> data = new ArrayList<>();
-//        Map<String, Object> row1 = new HashMap<>();
-//        row1.put("id", 1L);
-//        row1.put("lastName", "Петров");
-//        row1.put("age", 30L);
-//        row1.put("cost", 5.4);
-//        row1.put("active", true);
-//
-//        data.add(row1);
         jss.execute("INSERT VALUES ‘lastName’ = ‘Петров’ , ‘id’=1, ‘age’=30, ‘active’=true, ‘cost’=5.4");
         jss.execute("INSERT VALUES ‘lastName’ = ‘Иванов’ , ‘id’=2, ‘age’=25, ‘active’=false, ‘cost’=4.3");
         IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
@@ -473,18 +440,8 @@ class SelectTest {
     @Test
     public void selectWrongColumnTest2() throws Exception {
         JavaSchoolStarter jss = new JavaSchoolStarter();
-        List<Map<String, Object>> data = new ArrayList<>();
-//        Map<String, Object> row1 = new HashMap<>();
-//        row1.put("id", 1L);
-//        row1.put("lastName", "Петров");
-//        row1.put("age", 30L);
-//        row1.put("cost", 5.4);
-//        row1.put("active", true);
-//
-//        data.add(row1);
         jss.execute("INSERT VALUES ‘lastName’ = ‘Петров’ , ‘id’=1, ‘age’=30, ‘active’=true, ‘cost’=5.4");
         jss.execute("INSERT VALUES ‘lastName’ = ‘Иванов’ , ‘id’=2, ‘age’=25, ‘active’=false, ‘cost’=4.3");
-//        List<Map<String, Object>> sm = jss.execute("sELeCT wHeRE ‘age’<true");
         IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             List<Map<String, Object>> selected = jss.execute("sELeCT wHeRE ‘age’<true");
         });

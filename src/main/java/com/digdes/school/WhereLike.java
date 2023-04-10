@@ -1,7 +1,6 @@
 package com.digdes.school;
 
 import java.util.Map;
-import java.util.Objects;
 
 public class WhereLike implements WhereInterface {
     private final String key;

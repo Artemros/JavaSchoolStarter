@@ -3,51 +3,44 @@ package com.digdes.school;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
-class DividerTest {
+class DividerTest {//просмотр того, что получается на выходе у класса Divider
     @Test
     public void dividerTestInsert(){
         String request = "INSERT VALUES ‘lastName’ = ‘Федоров’ , ‘id’=3, ‘age’=40, ‘active’=true";
-        Divider divider = new Divider();
-        ArrayList<ArrayList<String>> data = divider.divide(request);
+        ArrayList<ArrayList<String>> data = Divider.divide(request);
         System.out.println(data);
     }
 
     @Test
     public void dividerTestSelectMoreOrEquals(){
         String request = "SELECT WHERE ‘age’>=30";
-        Divider divider = new Divider();
-        ArrayList<ArrayList<String>> data = divider.divide(request);
+        ArrayList<ArrayList<String>> data = Divider.divide(request);
         System.out.println(data);
     }
     @Test
     public void dividerTestSelectLessOrEquals(){
         String request = "SELECT WHERE ‘age’<=30";
-        Divider divider = new Divider();
-        ArrayList<ArrayList<String>> data = divider.divide(request);
+        ArrayList<ArrayList<String>> data = Divider.divide(request);
         System.out.println(data);
     }
     @Test
     public void dividerTestSelectNotEquals(){
         String request = "SELECT WHERE ‘age’!=30";
-        Divider divider = new Divider();
-        ArrayList<ArrayList<String>> data = divider.divide(request);
+        ArrayList<ArrayList<String>> data = Divider.divide(request);
         System.out.println(data);
     }
     @Test
     public void dividerTestSelectMore(){
         String request = "SELECT WHERE ‘age’>30";
-        Divider divider = new Divider();
-        ArrayList<ArrayList<String>> data = divider.divide(request);
+        ArrayList<ArrayList<String>> data = Divider.divide(request);
         System.out.println(data);
     }
 
     @Test
     public void dividerTestUpdate(){
         String request = "UPDATE VALUES ‘active’=true  where ‘active’=false";
-        Divider divider = new Divider();
-        ArrayList<ArrayList<String>> data = divider.divide(request);
+        ArrayList<ArrayList<String>> data = Divider.divide(request);
         System.out.println(data);
     }
 

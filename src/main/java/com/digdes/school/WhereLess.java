@@ -1,9 +1,6 @@
 package com.digdes.school;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class WhereLess implements WhereInterface {
     private final String key;
@@ -17,22 +14,11 @@ public class WhereLess implements WhereInterface {
 
     @Override
     public boolean test(Map<String, Object> row) {
-        int compare=-1;
-//        try {
-//            if(row.get(key).equals("true") || row.get(key).equals("false")) throw new Exception("Wrong data type");
-            switch (key) {
-                case ("id"), ("age"):
-                    compare = Long.compare((Long) value, (Long) row.get(key));
-                    break;
-                case ("cost"):
-                    compare = Double.compare((Double) value, (Double) row.get(key));
-                    break;
-                default:
-                    throw new IllegalArgumentException("Wrong column type");
-            }
-//        } catch (Exception e){
-//            throw new RuntimeException(e);
-//        }
+        int compare = switch (key) {
+            case ("id"), ("age") -> Long.compare((Long) value, (Long) row.get(key));
+            case ("cost") -> Double.compare((Double) value, (Double) row.get(key));
+            default -> throw new IllegalArgumentException("Wrong column type");
+        };
         return compare > 0;
     }
 }
