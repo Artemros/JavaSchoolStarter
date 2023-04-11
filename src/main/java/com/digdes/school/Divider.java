@@ -8,7 +8,6 @@ public class Divider {
         ArrayList<ArrayList<String>> returned = new ArrayList<>();
         List<String> list = new ArrayList<>();
         list.add(request);
-        List<String> tokens = new ArrayList<>();
         divideByComma(list);
         divideByCommand(list);
         divideByWhere(list);
@@ -40,22 +39,22 @@ public class Divider {
                 int r = 0;
                 int k = 0;
                 for (int j = 0; j < tmp.length() - 2; j++) {
-                    if (tmp.charAt(j) == '‘' || tmp.charAt(j) == '\'' && k==0) {
+                    if (tmp.charAt(j) == '‘' || tmp.charAt(j) == '\'' && k == 0) {
                         l = j;
-                        k=1;
-                    }else if (tmp.charAt(j) == '’' || tmp.charAt(j) == '\'') {
+                        k = 1;
+                    } else if (tmp.charAt(j) == '’' || tmp.charAt(j) == '\'') {
                         r = j;
-                        k=0;
+                        k = 0;
                     }
-                    if (tmp.toLowerCase().charAt(j) == 'w' && tmp.toLowerCase().charAt(j + 1) == 'h'&& tmp.toLowerCase().charAt(j + 2) == 'e'&& tmp.toLowerCase().charAt(j + 3) == 'r'&& tmp.toLowerCase().charAt(j + 4) == 'e' && r > l) {
+                    if (tmp.toLowerCase().charAt(j) == 'w' && tmp.toLowerCase().charAt(j + 1) == 'h' && tmp.toLowerCase().charAt(j + 2) == 'e' && tmp.toLowerCase().charAt(j + 3) == 'r' && tmp.toLowerCase().charAt(j + 4) == 'e' && r > l) {
                         List<String> new_list = new ArrayList<>();
-                        for(int i=0;i<curr;i++){
+                        for (int i = 0; i < curr; i++) {
                             new_list.add(list.get(i));
                         }
-                        new_list.add(tmp.substring(0,j-1).trim());
+                        new_list.add(tmp.substring(0, j - 1).trim());
                         new_list.add("where");
-                        new_list.add(tmp.substring(j+5).trim());
-                        for(int i=curr+1;i<list.size();i++){
+                        new_list.add(tmp.substring(j + 5).trim());
+                        for (int i = curr + 1; i < list.size(); i++) {
                             new_list.add(list.get(i));
                         }
                         list.clear();
@@ -78,22 +77,22 @@ public class Divider {
                 int r = 0;
                 int k = 0;
                 for (int j = 0; j < tmp.length() - 2; j++) {
-                    if (tmp.charAt(j) == '‘' || tmp.charAt(j) == '\'' && k==0) {
+                    if (tmp.charAt(j) == '‘' || tmp.charAt(j) == '\'' && k == 0) {
                         l = j;
-                        k=1;
+                        k = 1;
                     } else if (tmp.charAt(j) == '’' || tmp.charAt(j) == '\'') {
                         r = j;
-                        k=0;
+                        k = 0;
                     }
                     if (tmp.toLowerCase().charAt(j) == 'a' && tmp.toLowerCase().charAt(j + 1) == 'n' && tmp.toLowerCase().charAt(j + 2) == 'd' && r > l) {
                         List<String> new_list = new ArrayList<>();
-                        for(int i=0;i<curr;i++){
+                        for (int i = 0; i < curr; i++) {
                             new_list.add(list.get(i));
                         }
-                        new_list.add(tmp.substring(0,j-1).trim());
+                        new_list.add(tmp.substring(0, j - 1).trim());
                         new_list.add("and");
-                        new_list.add(tmp.substring(j+3).trim());
-                        for(int i=curr+1;i<list.size();i++){
+                        new_list.add(tmp.substring(j + 3).trim());
+                        for (int i = curr + 1; i < list.size(); i++) {
                             new_list.add(list.get(i));
                         }
                         list.clear();
@@ -116,22 +115,22 @@ public class Divider {
                 int r = 0;
                 int k = 0;
                 for (int j = 0; j < tmp.length() - 2; j++) {
-                    if (tmp.charAt(j) == '‘' || tmp.charAt(j) == '\'' && k==0) {
+                    if (tmp.charAt(j) == '‘' || tmp.charAt(j) == '\'' && k == 0) {
                         l = j;
-                        k=1;
-                    }else if (tmp.charAt(j) == '’' || tmp.charAt(j) == '\'') {
+                        k = 1;
+                    } else if (tmp.charAt(j) == '’' || tmp.charAt(j) == '\'') {
                         r = j;
-                        k=0;
+                        k = 0;
                     }
                     if (tmp.toLowerCase().charAt(j) == 'o' && tmp.toLowerCase().charAt(j + 1) == 'r' && r > l) {
                         List<String> new_list = new ArrayList<>();
-                        for(int i=0;i<curr;i++){
+                        for (int i = 0; i < curr; i++) {
                             new_list.add(list.get(i));
                         }
-                        new_list.add(tmp.substring(0,j-1).trim());
+                        new_list.add(tmp.substring(0, j - 1).trim());
                         new_list.add("or");
-                        new_list.add(tmp.substring(j+2).trim());
-                        for(int i=curr+1;i<list.size();i++){
+                        new_list.add(tmp.substring(j + 2).trim());
+                        for (int i = curr + 1; i < list.size(); i++) {
                             new_list.add(list.get(i));
                         }
                         list.clear();
@@ -157,51 +156,51 @@ public class Divider {
         int where_iterator = 0;
         while (where_iterator < where.size()) {
             List<String> temp = new ArrayList<>();
-            for (int i = 0; i < where.size(); i++) {
-                if (where.get(i).contains(">=")) {
+            for (String s : where) {
+                if (s.contains(">=")) {
                     temp.add(">=");
-                    StringBuilder sb = new StringBuilder(where.get(i));
+                    StringBuilder sb = new StringBuilder(s);
                     sb.delete(0, 2);
                     if (!sb.isEmpty()) {
                         temp.add(String.valueOf(sb));
                     }
-                } else if (where.get(i).contains("<=")) {
+                } else if (s.contains("<=")) {
                     temp.add("<=");
-                    StringBuilder sb = new StringBuilder(where.get(i));
+                    StringBuilder sb = new StringBuilder(s);
                     sb.delete(0, 2);
                     if (!sb.isEmpty()) {
                         temp.add(String.valueOf(sb));
                     }
-                } else if (where.get(i).contains("!=")) {
+                } else if (s.contains("!=")) {
                     temp.add("!=");
-                    StringBuilder sb = new StringBuilder(where.get(i));
+                    StringBuilder sb = new StringBuilder(s);
                     sb.delete(0, 2);
                     if (!sb.isEmpty()) {
                         temp.add(String.valueOf(sb));
                     }
-                } else if (where.get(i).contains("=")) {
+                } else if (s.contains("=")) {
                     temp.add("=");
-                    StringBuilder sb = new StringBuilder(where.get(i));
+                    StringBuilder sb = new StringBuilder(s);
                     sb.delete(0, 1);
                     if (!sb.isEmpty()) {
                         temp.add(String.valueOf(sb));
                     }
-                } else if (where.get(i).contains(">")) {
+                } else if (s.contains(">")) {
                     temp.add(">");
-                    StringBuilder sb = new StringBuilder(where.get(i));
+                    StringBuilder sb = new StringBuilder(s);
                     sb.delete(0, 1);
                     if (!sb.isEmpty()) {
                         temp.add(String.valueOf(sb));
                     }
-                } else if (where.get(i).contains("<")) {
+                } else if (s.contains("<")) {
                     temp.add("<");
-                    StringBuilder sb = new StringBuilder(where.get(i));
+                    StringBuilder sb = new StringBuilder(s);
                     sb.delete(0, 1);
                     if (!sb.isEmpty()) {
                         temp.add(String.valueOf(sb));
                     }
                 } else {
-                    temp.add(where.get(i));
+                    temp.add(s);
                 }
             }
             where.clear();
@@ -212,19 +211,16 @@ public class Divider {
     }
 
     private static void extractValues(ArrayList<String> data, ArrayList<ArrayList<String>> returned) {
-        for (String s : Arrays.asList("=")) {
-            List<String> temp = new ArrayList<>();
-            for (int i = 0; i < data.size(); i++) {
-                StringTokenizer tokenizer = new StringTokenizer(data.get(i), s);
-
-                while (tokenizer.hasMoreElements()) {
-                    temp.add(tokenizer.nextToken());
-                }
+        List<String> temp = new ArrayList<>();
+        for (String datum : data) {
+            StringTokenizer tokenizer = new StringTokenizer(datum, "=");
+            while (tokenizer.hasMoreElements()) {
+                temp.add(tokenizer.nextToken());
             }
-            data.clear();
-            data.addAll(temp);
-
         }
+        data.clear();
+        data.addAll(temp);
+
         ArrayList<String> values = new ArrayList<>(data);
         data.clear();
         returned.add(values);
@@ -233,8 +229,8 @@ public class Divider {
     private static void divideByQuotes(List<String> list) {
         for (String s : Arrays.asList("‘", "’", "'")) {
             List<String> temp = new ArrayList<>();
-            for (int i = 0; i < list.size(); i++) {
-                StringTokenizer tokenizer = new StringTokenizer(list.get(i), s);
+            for (String value : list) {
+                StringTokenizer tokenizer = new StringTokenizer(value, s);
 
                 while (tokenizer.hasMoreElements()) {
                     String token = tokenizer.nextToken();
@@ -274,20 +270,18 @@ public class Divider {
     }
 
     private static void divideByComma(List<String> list) {
-        for (String s : Arrays.asList(",")) {
-            List<String> temp = new ArrayList<>();
-            for (int i = 0; i < list.size(); i++) {
-                StringTokenizer tokenizer = new StringTokenizer(list.get(i), s);
+        List<String> temp = new ArrayList<>();
+        for (String value : list) {
+            StringTokenizer tokenizer = new StringTokenizer(value, ",");
 
-                while (tokenizer.hasMoreElements()) {
-                    String token = tokenizer.nextToken();
-                    temp.add(token);
-                }
+            while (tokenizer.hasMoreElements()) {
+                String token = tokenizer.nextToken();
+                temp.add(token);
             }
-            list.clear();
-            list.addAll(temp);
-
         }
+        list.clear();
+        list.addAll(temp);
+
     }
 }
 
