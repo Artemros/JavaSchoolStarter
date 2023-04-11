@@ -24,7 +24,7 @@ public class DelTest {
         jss.execute("INSERT VALUES ‘lastName’ = ‘Петров’ , ‘id’=1, ‘age’=30, ‘active’=true, ‘cost’=5.4");
         List<Map<String, Object>> deleted = jss.execute("DELETE");
         Assertions.assertIterableEquals(data, deleted);
-        System.out.println(jss.getJssList());
+//        System.out.println(jss.getJssList());
     }
 
     @Test
@@ -50,7 +50,7 @@ public class DelTest {
         jss.execute("INSERT VALUES ‘lastName’ = ‘Иванов’ , ‘id’=2, ‘age’=25, ‘active’=false, ‘cost’=4.3");
         List<Map<String, Object>> deleted = jss.execute("DELETE");
         Assertions.assertIterableEquals(data, deleted);
-        System.out.println(jss.getJssList());
+//        System.out.println(jss.getJssList());
     }
 
     @Test
@@ -69,6 +69,6 @@ public class DelTest {
         jss.execute("INSERT VALUES ‘lastName’ = ‘Федоров’ , ‘id’=3, ‘age’=40, ‘active’=true, ‘cost’=10.1");
         List<Map<String, Object>> deleted = jss.execute("DELETE WHERE ‘id’=3");
         Assertions.assertIterableEquals(data, deleted);
-        System.out.println(jss.getJssList());
+//      System.out.println(jss.getJssList());
     }
 }

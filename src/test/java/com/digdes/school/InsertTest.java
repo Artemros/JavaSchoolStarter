@@ -101,13 +101,13 @@ public class InsertTest {
         List<Map<String, Object>> data = new ArrayList<>();
         Map<String,Object> row1 = new HashMap<>();
         row1.put("id",1L);
-        row1.put("lastName","Петров");
+        row1.put("lastName","Петров Петр");
         row1.put("age",30L);
         row1.put("cost",null);
         row1.put("active", true);
 
         data.add(row1);
-        List<Map<String, Object>> selected = jss.execute("INSERT VALUES ‘lastName’ = ‘Петров’ , ‘id’=1, ‘age’=30, ‘active’=true");
+        List<Map<String, Object>> selected = jss.execute("INSERT VALUES ‘lastName’ = ‘Петров Петр’ , ‘id’=1, ‘age’=30, ‘active’=true");
         Assertions.assertIterableEquals(data, selected);
     }
 }

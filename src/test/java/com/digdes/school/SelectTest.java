@@ -149,6 +149,32 @@ class SelectTest {
     }
 
     @Test
+    public void selectEqualsOREgorTest1() throws Exception {
+        JavaSchoolStarter jss = new JavaSchoolStarter();
+        List<Map<String, Object>> data = new ArrayList<>();
+        Map<String, Object> row1 = new HashMap<>();
+        row1.put("id", 1L);
+        row1.put("lastName", "Egor Andrew Where");
+        row1.put("age", 30L);
+        row1.put("cost", 5.4);
+        row1.put("active", true);
+        Map<String, Object> row2 = new HashMap<>();
+        row2.put("id", 2L);
+        row2.put("lastName", "Иванов");
+        row2.put("age", 25L);
+        row2.put("cost", 4.3);
+        row2.put("active", false);
+
+        data.add(row1);
+        data.add(row2);
+        jss.execute("INSERT VALUES ‘lastName’ = ‘Egor Andrew Where’ , ‘id’=1, ‘age’=30, ‘active’=true, ‘cost’=5.4");
+        jss.execute("INSERT VALUES ‘lastName’ = ‘Иванов’ , ‘id’=2, ‘age’=25, ‘active’=false, ‘cost’=4.3");
+        List<Map<String, Object>> selected = jss.execute("SELECT WHERE ‘age’=30 OR ‘cost’=4.3");
+        Assertions.assertIterableEquals(data, selected);
+
+    }
+
+    @Test
     public void selectOrAndOrTest1() throws Exception {
         JavaSchoolStarter jss = new JavaSchoolStarter();
         List<Map<String, Object>> data = new ArrayList<>();
@@ -445,5 +471,22 @@ class SelectTest {
         IllegalArgumentException thrown = Assertions.assertThrows(IllegalArgumentException.class, () -> {
             List<Map<String, Object>> selected = jss.execute("sELeCT wHeRE ‘age’<true");
         });
+    }
+
+    @Test
+    public void selectWithSpaceColumnTest1() throws Exception {
+        JavaSchoolStarter jss = new JavaSchoolStarter();
+        List<Map<String, Object>> data = new ArrayList<>();
+        Map<String,Object> row1 = new HashMap<>();
+        row1.put("id",1L);
+        row1.put("lastName","Петров Петр");
+        row1.put("age",30L);
+        row1.put("cost",null);
+        row1.put("active", true);
+
+        data.add(row1);
+        jss.execute("INSERT VALUES ‘lastName’ = ‘Петров Петр’ , ‘id’=1, ‘age’=30, ‘active’=true");
+        List<Map<String, Object>> selected = jss.execute("SELECT WHERE ‘age’>=30 and ‘lastName’ ilike ‘Петров%’");
+        Assertions.assertIterableEquals(data, selected);
     }
 }

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 
-class DividerTest {//просмотр того, что получается на выходе у класса Divider
+class DividerTest {//просмотр того, что получается на выходе у класса Divider, не автоматизированные тесты
     @Test
     public void dividerTestInsert(){
         String request = "INSERT VALUES ‘lastName’ = ‘Федоров’ , ‘id’=3, ‘age’=40, ‘active’=true";
@@ -43,5 +43,17 @@ class DividerTest {//просмотр того, что получается на
         ArrayList<ArrayList<String>> data = Divider.divide(request);
         System.out.println(data);
     }
+    @Test
+    public void dividerTestUpdateOrAndWhere(){
+        String request = "UPDATE VALUES ‘active’=true  where ‘active’=false or ‘age’>30 and ‘lastName’ = ‘Egor Andrew Where’ or ‘age’<20 and ‘active’=true";
+        ArrayList<ArrayList<String>> data = Divider.divide(request);
+        System.out.println(data);
+    }
 
+    @Test
+    public void dividerTestInsertOrAnd(){
+        String request = "INSERT VALUES ‘lastName’ = ‘Egor Andrew Where’ , ‘id’=1, ‘age’=30, ‘active’=true, ‘cost’=5.4";
+        ArrayList<ArrayList<String>> data = Divider.divide(request);
+        System.out.println(data);
+    }
 }
