@@ -100,7 +100,7 @@ public class UpdateTest {
         Map<String,Object> row3 = new HashMap<>();
         row3.put("id",3L);
         row3.put("lastName","Федоров");
-        row3.put("age",30L);
+        row3.put("age",null);
         row3.put("cost",10.1);
         row3.put("active", null);
 
@@ -108,7 +108,7 @@ public class UpdateTest {
         jss.execute("INSERT VALUES ‘lastName’ = ‘Петров’ , ‘id’=1, ‘age’=30, ‘active’=true, ‘cost’=5.4");
         jss.execute("INSERT VALUES ‘lastName’ = ‘Иванов’ , ‘id’=2, ‘age’=25, ‘active’=false, ‘cost’=4.3");
         jss.execute("INSERT VALUES ‘lastName’ = ‘Федоров’ , ‘id’=3, ‘age’=40, ‘cost’=10.1");
-        List<Map<String, Object>> updated = jss.execute("UPDATE VALUES ‘active’=null, ‘cost’=10.1, ‘age’=30  where ‘id’=3");
+        List<Map<String, Object>> updated = jss.execute("UPDATE VALUES ‘active’=null, ‘cost’=10.1, ‘age’=null  where ‘id’=3");
         Assertions.assertIterableEquals(data, updated);
         //System.out.println(jss.getJssList());
     }

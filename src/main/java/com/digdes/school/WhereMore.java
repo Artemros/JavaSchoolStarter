@@ -14,17 +14,11 @@ public class WhereMore implements WhereInterface {
 
     @Override
     public boolean test(Map<String, Object> row){
-        int compare=1;
-        switch (key) {
-            case ("id"), ("age"):
-                compare = Long.compare((Long)value, (Long)row.get(key));
-                break;
-            case ("cost"):
-                compare = Double.compare((Double)value, (Double)row.get(key));
-                break;
-            default:
-                throw new IllegalArgumentException("Wrong column type");
-        }
+        int compare = switch (key) {
+            case ("id"), ("age") -> Long.compare((Long) value, (Long) row.get(key));
+            case ("cost") -> Double.compare((Double) value, (Double) row.get(key));
+            default -> throw new IllegalArgumentException("Wrong column type");
+        };
         return compare < 0;
     }
 }

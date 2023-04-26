@@ -291,7 +291,7 @@ class SelectTest {
         data.add(row1);
         jss.execute("INSERT VALUES ‘lastName’ = ‘Петров’ , ‘id’=1, ‘age’=30, ‘active’=true, ‘cost’=5.4");
         jss.execute("INSERT VALUES ‘lastName’ = ‘Иванов’ , ‘id’=2, ‘age’=25, ‘active’=false, ‘cost’=4.3");
-        List<Map<String, Object>> selected = jss.execute("SELECT WHERE ‘age’>=30 and ‘lastName’ like ‘%П%’");
+        List<Map<String, Object>> selected = jss.execute("SELECT WHERE ‘age’>=30 aNd ‘lastName’ like ‘%П%’");
         Assertions.assertIterableEquals(data, selected);
     }
 

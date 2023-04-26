@@ -18,22 +18,18 @@ public class JavaSchoolStarter {
     //На вход запрос, на выход результат выполнения запроса
     public List<Map<String, Object>> execute(String request) {
         //Здесь начало исполнения вашего кода
-        ArrayList<ArrayList<String>> data = Divider.divide(request);
-        ArrayList<String> valueStrings = data.get(1);
-        Map<String, Object> valueInsertMap = getInsertMap(valueStrings);
-        Map<String, Object> valueUpdateMap = getUpdateMap(valueStrings);
-        ArrayList<String> whereStrings = data.get(2);
-        Predicate<Map<String, Object>> where = new Where().getWhere(whereStrings);
+        RequestParameters data = Divider.divide(request);
+        String command = data.operation();
+        Map<String, Object> values = data.values();
+        Predicate<Map<String,Object>> where = data.where();
 
-        for (int i = 0; i < valueStrings.size(); i += 2) {
-            haveColumn(valueStrings.get(i));
-        }
-        return switch (data.get(0).get(0).toLowerCase()) {
-            case ("insert") -> insert(valueInsertMap);
-            case ("update") -> update(valueUpdateMap, where);
+
+        return switch (command) {
+            case ("insert") -> insert(values);
+            case ("update") -> update(values, where);
             case ("delete") -> delete(where);
             case ("select") -> select(where);
-            default -> throw new IllegalStateException("Unexpected value: " + data.get(0));
+            default -> throw new IllegalStateException("Unexpected value: " + command);
         };
     }
 
@@ -71,36 +67,6 @@ public class JavaSchoolStarter {
                     }
                 } else {
                     result.put(column_name, null);
-                }
-            }
-            iterator += 2;
-        }
-        return result;
-    }
-
-    private Map<String, Object> getInsertMap(ArrayList<String> valueStrings) {
-        List<String> columns = new ArrayList<>();
-        columns.add("id");
-        columns.add("lastName");
-        columns.add("age");
-        columns.add("cost");
-        columns.add("active");
-        Map<String, Object> result = new HashMap<>();
-        for (String s : columns) {
-            result.put(s, null);
-        }
-        int iterator = 0;
-        while (iterator < valueStrings.size()) {
-            String column_name = valueStrings.get(iterator);
-            if (columns.contains(column_name)) {
-                String column_data = valueStrings.get(iterator + 1);
-                if (!column_data.isEmpty()) {
-                    switch (column_name) {
-                        case ("id"), ("age") -> result.replace(column_name, Long.parseLong(column_data));
-                        case ("lastName") -> result.replace(column_name, column_data);
-                        case ("cost") -> result.replace(column_name, Double.parseDouble(column_data));
-                        case ("active") -> result.replace(column_name, column_data.equals("true"));
-                    }
                 }
             }
             iterator += 2;
@@ -156,9 +122,19 @@ public class JavaSchoolStarter {
     }
 
     private List<Map<String, Object>> insert(Map<String, Object> valueMap) {
+        for (String column_name: valueMap.keySet()) {
+            haveColumn(column_name);
+        }
+        Map<String, Object> columns = new HashMap<>();
+        columns.put("id", null);
+        columns.put("lastName",null);
+        columns.put("age", null);
+        columns.put("cost", null);
+        columns.put("active",null);
+        columns.putAll(valueMap);
         List<Map<String, Object>> result = new ArrayList<>();
-        result.add(valueMap);
-        jssList.add(valueMap);
+        result.add(columns);
+        jssList.add(columns);
         return result;
     }
 
